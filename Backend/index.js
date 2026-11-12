@@ -1,7 +1,10 @@
 const express=require("express");
 const mongoose = require('mongoose');
 const cors=require('cors');
-const methodOverride=require('method-override')
+const methodOverride=require('method-override');
+const wrapAsync=require("./utils/wrapAsync");
+const ExpressError=require("./utils/ExpressError");
+const {validateSchema}=require("./middleware");
 
 const app=express();
 const Port=8080;
@@ -37,34 +40,35 @@ const data=require("./init/data");
 // })
 
 //listing route
-app.get("/listing",async (req,res)=>{
-    let allListing=await Listing.find({});
-    res.json(allListing);
-})
+app.get("/listing",wrapAsync(async (req,res)=>{ 
+        let allListing=await Listing.find({});
+        res.json(allListing);
+}))
+
 
 //new route
-app.post("/listing",(req,res)=>{
+app.post("/listing",validateSchema,wrapAsync(async (req,res)=>{
     // console.log("Body:",req.body);
     let {listing}=req.body;
     Listing.insertOne(listing);
     res.redirect("http://localhost:5173/listing");
-})
+}))
 
 // Show route
-app.get("/listing/:id",async (req,res)=>{
+app.get("/listing/:id",wrapAsync(async (req,res)=>{
     let {id}=req.params;
     let data=await Listing.findById(id);
     res.json(data);
-})
+}))
 
 //Edit route
-app.get("/listing/:id/edit",async (req,res)=>{
+app.get("/listing/:id/edit",wrapAsync(async (req,res)=>{
     let {id}=req.params;
     let data=await Listing.findById(id);
     res.json(data);
-})
+}))
 
-app.put("/listing/:id/edit",async (req,res)=>{
+app.put("/listing/:id/edit",wrapAsync(async (req,res)=>{
     let {id}=req.params;
     let listing=req.body;
     listing={
@@ -73,14 +77,24 @@ app.put("/listing/:id/edit",async (req,res)=>{
             url:listing.image
         }
     }
-    // console.log(listing);
-    await Listing.findByIdAndUpdate(id,listing,{new:true});
-    res.redirect("http://localhost:5173/listing");
-})
+    res.send(listing);
+    // await Listing.findByIdAndUpdate(id,listing,{new:true});
+    // res.redirect("http://localhost:5173/listing");
+}))
 
 
-app.delete("/listing/:id",async (req,res)=>{
+app.delete("/listing/:id",wrapAsync(async (req,res)=>{
     let {id}=req.params;
     await Listing.findByIdAndDelete(id);
     res.redirect('http://localhost:5173/listing');
+}))
+
+app.use((req,res,next)=>{
+    next(new ExpressError(404,"Page not found"));
 })
+app.use((err,req,res,next)=>{
+    let {status=505,message="something is wrong"}=err;
+    res.status=status;
+    res.send(message);
+})
+

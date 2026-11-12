@@ -17,7 +17,7 @@ export default function CardGrp(){
     return(
         <>
             <AddBtn/>
-            <div className="allCard" style={{margin:'20px' }}>
+            <div className="allCard" style={{margin:'20px', textDecoration:'none'}}>
                 {listings.map((listing)=>(
                     <Link to={`/listing/${listing._id}`}>
                         <Card title={listing.title} price={listing.price} id={listing._id} location={listing.location} image={listing.image?.url}/>

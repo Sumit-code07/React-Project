@@ -32,7 +32,6 @@ export default function EditListing({}){
                 ...curr,[name]:value
             }))
         }
-        console.log(listing);
     }
      return(
         <>
@@ -43,7 +42,7 @@ export default function EditListing({}){
                 <br/>
                 <input name="image" placeholder="image" type="text" value={listing.image?.url} onChange={formHandler}/>
                 <br/>
-                <input name="price" placeholder="Price" type="text" value={listing.price} onChange={formHandler}/>
+                <input name="price" placeholder="Price" type="number" value={listing.price} onChange={formHandler}/>
                 <br/>
                 <input name="location" placeholder="location" type="text" value={listing.location} onChange={formHandler}/>
                 <br/>
