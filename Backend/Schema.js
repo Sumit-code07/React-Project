@@ -14,4 +14,13 @@ const listingSchema=joi.object({
     }).required(),
 });
 
-module.exports=listingSchema;
+const editListing=joi.object({
+    title:joi.string().required(),
+    description: joi.string(),
+    image:joi.string(),
+    price:joi.number().required(),
+    location:joi.string().required(),
+    country:joi.string().required(),
+})
+
+module.exports={listingSchema,editListing};

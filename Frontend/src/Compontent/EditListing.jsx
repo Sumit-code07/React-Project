@@ -35,18 +35,24 @@ export default function EditListing({}){
     }
      return(
         <>
-            <form method='POST' action={`http://localhost:8080/listing/${id}/edit?_method=PUT`} >
-                <input name="title" placeholder="Title" type="text" value={listing.title} onChange={formHandler}/>
+            <form method='POST' action={`http://localhost:8080/listing/${id}/edit?_method=PUT`} data-bs-validate>
+                <input name="title" placeholder="Title" class="form-control" required type="text" value={listing.title} onChange={formHandler}/>
+                <div class="invalid-feedback">Title is required</div>
                 <br/>
-                <textarea name="description" placeholder="Description" type="text" value={listing.description} onChange={formHandler}/>
+                <textarea name="description" placeholder="Description" class="form-control" required type="text" value={listing.description} onChange={formHandler}/>
+                <div class="invalid-feedback">Descrption is required</div>
                 <br/>
-                <input name="image" placeholder="image" type="text" value={listing.image?.url} onChange={formHandler}/>
+                <input name="image" placeholder="image" class="form-control" required type="text" value={listing.image?.url} onChange={formHandler}/>
+                <div class="invalid-feedback">Image Url is required</div>
                 <br/>
-                <input name="price" placeholder="Price" type="number" value={listing.price} onChange={formHandler}/>
+                <input name="price" placeholder="Price" class="form-control" required type="number" value={listing.price} onChange={formHandler}/>
+                <div class="invalid-feedback">Price is required</div>
                 <br/>
-                <input name="location" placeholder="location" type="text" value={listing.location} onChange={formHandler}/>
+                <input name="location" placeholder="location" class="form-control" required type="text" value={listing.location} onChange={formHandler}/>
+                <div class="invalid-feedback">Location is required</div>
                 <br/>
-                <input name="country" placeholder="country" type="text" value={listing.country} onChange={formHandler}/>
+                <input name="country" placeholder="country" class="form-control" required type="text" value={listing.country} onChange={formHandler}/>
+                <div class="invalid-feedback">Country is required</div>
                 <br/>
                 <button>Submit</button>
             </form>

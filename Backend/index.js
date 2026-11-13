@@ -4,7 +4,7 @@ const cors=require('cors');
 const methodOverride=require('method-override');
 const wrapAsync=require("./utils/wrapAsync");
 const ExpressError=require("./utils/ExpressError");
-const {validateSchema}=require("./middleware");
+const {validateSchema,editValidation}=require("./middleware");
 
 const app=express();
 const Port=8080;
@@ -68,7 +68,7 @@ app.get("/listing/:id/edit",wrapAsync(async (req,res)=>{
     res.json(data);
 }))
 
-app.put("/listing/:id/edit",wrapAsync(async (req,res)=>{
+app.put("/listing/:id/edit",editValidation,wrapAsync(async (req,res)=>{
     let {id}=req.params;
     let listing=req.body;
     listing={
@@ -77,9 +77,8 @@ app.put("/listing/:id/edit",wrapAsync(async (req,res)=>{
             url:listing.image
         }
     }
-    res.send(listing);
-    // await Listing.findByIdAndUpdate(id,listing,{new:true});
-    // res.redirect("http://localhost:5173/listing");
+    await Listing.findByIdAndUpdate(id,listing,{new:true});
+    res.redirect("http://localhost:5173/listing")
 }))
 
 
